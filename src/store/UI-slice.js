@@ -10,5 +10,6 @@ const uiSlice = createSlice({
     }
 });
 
-export const cartActions = uiSlice.actions;
+// uiSlice also exposes an actions which we can use and we will expose them as well,
+export const uiActions = uiSlice.actions;
 export default uiSlice;
