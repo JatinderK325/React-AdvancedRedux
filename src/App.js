@@ -4,7 +4,7 @@ import Layout from './components/Layout/Layout';
 import Products from './components/Shop/Products';
 import { useSelector, useDispatch } from 'react-redux';
 import { useEffect } from 'react';
-import { uiActions } from './store/UI-slice';
+import { sendCartData } from './store/cart-slice';
 import Notification from './components/UI/Notification';
 
 let isInitial = true;
@@ -17,7 +17,15 @@ function App() {
   const cart = useSelector(state => state.cart);
   const notification = useSelector((state) => state.ui.notification);
 
+  // 1. Inside the component way: to put logic for side-effects and async code.
   useEffect(() => {
+    if (isInitial) {
+      isInitial = false;
+      return;
+    }
+
+    dispatch(sendCartData(cart));
+    /* we will use its alternative that has been defined in cart-slice.js file
     const sendCartData = async () => {
       dispatch(uiActions.showNotification({
         status: 'pending',
@@ -38,18 +46,13 @@ function App() {
       }));
     };
 
-    if (isInitial) {
-      isInitial = false;
-      return;
-    }
-
     sendCartData().catch(error => {
       dispatch(uiActions.showNotification({
         status: 'error',
         title: 'Error!',
         message: 'Sending cart data failed!'
       }))
-    });
+    }); */
   }, [cart, dispatch]);
 
   return (
