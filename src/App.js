@@ -27,7 +27,10 @@ function App() {
       return;
     }
 
-    dispatch(sendCartData(cart));
+    if (cart.changed) {
+      dispatch(sendCartData(cart));
+    }
+
     /* we will use its alternative that has been defined in cart-actions.js file
     const sendCartData = async () => {
       dispatch(uiActions.showNotification({

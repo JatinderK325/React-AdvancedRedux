@@ -5,6 +5,7 @@ const cartSlice = createSlice({
     initialState: {
         items: [],
         totalQuantity: 0,
+        changed: false,
     },
     reducers: {
         replaceCart(state, action) {
@@ -16,6 +17,7 @@ const cartSlice = createSlice({
             const newItem = action.payload;
             const existingItem = state.items.find(item => item.id === newItem.id);
             state.totalQuantity++;
+            state.changed = true;
             if (!existingItem) {
                 state.items.push({
                     id: newItem.id,
@@ -34,6 +36,7 @@ const cartSlice = createSlice({
             const id = action.payload;
             const existingItem = state.items.find(item => item.id === id);
             state.totalQuantity--;
+            state.changed = true;
             if (existingItem.quantity === 1) {
                 // filtering that one item that we want to remove. It will override the array of items with a new array where this item which we want to remove will be missing. So we will keep all the items where the id do not match the one id we are trying to remove. thus, for the item, where the id is equal will filter that out and remove it therefore. 
                 state.items = state.items.filter(item => item.id !== id);

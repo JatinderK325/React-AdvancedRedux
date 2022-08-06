@@ -14,7 +14,10 @@ export const sendCartData = (cart) => {
         const sendRequest = async () => {
             const response = await fetch('https://react-advancedredux-default-rtdb.firebaseio.com/cart.json', {
                 method: 'PUT',
-                body: JSON.stringify(cart),
+                body: JSON.stringify({ // instead of returning the whole cart, just returning 'items' array and 'totalQuantity' properties becoz we do not need 'changed' property there in the database when we send our data to the server.
+                    items: cart.items,
+                    totalQuantity: cart.totalQuantity,
+                }),
             });
             if (!response.ok) {
                 throw new Error('Sending cart data failed.');
@@ -41,7 +44,7 @@ export const sendCartData = (cart) => {
 // Action creator function for fetching data(cart):
 
 export const fetchCartData = () => { // immediately returning a function that takes dispatch as an argument.
-    return async(dispatch) => {
+    return async (dispatch) => {
 
         const fetchData = async () => {
             const response = await fetch('https://react-advancedredux-default-rtdb.firebaseio.com/cart.json');
@@ -55,7 +58,11 @@ export const fetchCartData = () => { // immediately returning a function that ta
         };
         try {
             const cartData = await fetchData();
-            dispatch(cartActions.replaceCart(cartData));
+            dispatch(cartActions.replaceCart({
+                // if we add items to cart means (Add to cart), then when we fetch data we shd get items that we store in the server. But in some cases, if we don't add items to cart so firebase data contains 0 items so in this case if we fetch data, it should give us empty array instead of showing undefined error. 
+                items: cartData.items || [],
+                totalQuantity: cartData.totalQuantity
+            }));
         }
         catch (error) {
             dispatch(uiActions.showNotification({
