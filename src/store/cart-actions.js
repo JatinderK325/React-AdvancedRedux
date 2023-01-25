@@ -2,6 +2,7 @@ import { uiActions } from "./UI-slice";
 import { cartActions } from "./cart-slice";
 
 // 2. Inside the action creators way: to put logic for side-effects and async code. This is an alternative for 'Inside the component way'.
+
 // Action creator function for sending data(cart):
 export const sendCartData = (cart) => {
     return async (dispatch) => {
